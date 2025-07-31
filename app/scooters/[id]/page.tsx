@@ -17,7 +17,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid'
 
-interface Car {
+interface Scooter {
   id: string
   make: string
   model: string
@@ -35,10 +35,10 @@ interface Car {
     responseTime: string
   }
   features: {
-    seats: number
-    transmission: string
-    fuel: string
-    doors: number
+    weightCapacity: number
+    batteryType: string
+    range: number
+    category: string
   }
   description: string
   guidelines: string[]
@@ -49,10 +49,10 @@ interface Car {
   }>
 }
 
-const mockCar: Car = {
+const mockScooter: Scooter = {
   id: '1',
-  make: 'Tesla',
-  model: 'Model 3',
+  make: 'Vespa',
+  model: 'Primavera',
   year: 2023,
   images: [
     '/api/placeholder/800/600',
@@ -60,7 +60,7 @@ const mockCar: Car = {
     '/api/placeholder/800/600',
     '/api/placeholder/800/600'
   ],
-  price: 89,
+  price: 45,
   rating: 4.9,
   reviews: 127,
   location: 'San Francisco, CA',
@@ -72,27 +72,27 @@ const mockCar: Car = {
     responseTime: 'within an hour'
   },
   features: {
-    seats: 5,
-    transmission: 'Automatic',
-    fuel: 'Electric',
-    doors: 4
+    weightCapacity: 300,
+    batteryType: 'Lithium-Ion',
+    range: 50,
+    category: 'Standard'
   },
-  description: 'Experience the future of driving with this pristine Tesla Model 3. Perfect for city driving and long trips with exceptional range and performance. Fully loaded with autopilot, premium interior, and supercharging access.',
+  description: 'Experience the freedom of urban mobility with this pristine Vespa Primavera. Perfect for city commuting and exploring with exceptional battery range and performance. Fully loaded with modern features and easy charging access.',
   guidelines: [
     'No smoking or pets allowed',
-    'Return with at least 50% charge',
-    'Treat the car with care as if it were your own',
+    'Return with at least 50% battery',
+    'Treat the scooter with care as if it were your own',
     'Report any issues immediately'
   ],
   extras: [
-    { name: 'Prepaid EV charging', price: 25, included: false },
-    { name: 'Airport pickup/dropoff', price: 50, included: false },
-    { name: 'Child seat', price: 15, included: false },
-    { name: 'Premium cleaning', price: 35, included: false }
+    { name: 'Prepaid charging', price: 15, included: false },
+    { name: 'Airport pickup/dropoff', price: 35, included: false },
+    { name: 'Helmet rental', price: 10, included: false },
+    { name: 'Premium cleaning', price: 20, included: false }
   ]
 }
 
-export default function CarDetail() {
+export default function ScooterDetail() {
   const [selectedImage, setSelectedImage] = useState(0)
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
@@ -109,17 +109,17 @@ export default function CarDetail() {
   }
 
   const calculateTotal = () => {
-    if (!startDate || !endDate) return mockCar.price
+    if (!startDate || !endDate) return mockScooter.price
     
     const start = new Date(startDate)
     const end = new Date(endDate)
     const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
     
-    const extrasTotal = mockCar.extras
+    const extrasTotal = mockScooter.extras
       .filter(extra => selectedExtras.includes(extra.name))
       .reduce((sum, extra) => sum + extra.price, 0)
     
-    return (mockCar.price * days) + extrasTotal
+    return (mockScooter.price * days) + extrasTotal
   }
 
   return (
@@ -128,18 +128,18 @@ export default function CarDetail() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">
-            {mockCar.year} {mockCar.make} {mockCar.model}
+            {mockScooter.year} {mockScooter.make} {mockScooter.model}
           </h1>
           <div className="flex items-center mt-2 space-x-4">
             <div className="flex items-center">
               <StarIcon className="h-5 w-5 text-yellow-400" />
               <span className="ml-1 text-sm text-gray-600">
-                {mockCar.rating} ({mockCar.reviews} reviews)
+                {mockScooter.rating} ({mockScooter.reviews} reviews)
               </span>
             </div>
             <div className="flex items-center">
               <MapPinIcon className="h-5 w-5 text-gray-400" />
-              <span className="ml-1 text-sm text-gray-600">{mockCar.location}</span>
+              <span className="ml-1 text-sm text-gray-600">{mockScooter.location}</span>
             </div>
           </div>
         </div>
@@ -151,11 +151,11 @@ export default function CarDetail() {
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="relative aspect-[16/10]">
                 <Image
-                  src={mockCar.images[selectedImage]}
-                  alt={`${mockCar.make} ${mockCar.model}`}
-                  fill
-                  className="object-cover"
-                />
+                    src={mockScooter.images[selectedImage]}
+                    alt={`${mockScooter.make} ${mockScooter.model}`}
+                    fill
+                    className="object-cover"
+                  />
                 <button
                   onClick={() => setIsFavorite(!isFavorite)}
                   className="absolute top-4 right-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
@@ -174,51 +174,52 @@ export default function CarDetail() {
                 </button>
               </div>
               <div className="grid grid-cols-4 gap-1 p-2">
-                {mockCar.images.slice(0, 4).map((image, index) => (
+                {mockScooter.images.slice(0, 4).map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`relative aspect-video ${selectedImage === index ? 'ring-2 ring-scoovio-500' : ''}`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${mockCar.make} ${mockCar.model} ${index + 1}`}
-                      fill
-                      className="object-cover rounded"
-                    />
+                    aria-label={`View ${mockScooter.make} ${mockScooter.model} image ${index + 1}`}
+                >
+                  <Image
+                    src={image}
+                    alt={`${mockScooter.make} ${mockScooter.model} ${index + 1}`}
+                    fill
+                    className="object-cover rounded"
+                  />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Car Details */}
+            {/* Scooter Details */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold mb-4">About this car</h2>
-              <p className="text-gray-600 mb-6">{mockCar.description}</p>
+              <h2 className="text-xl font-semibold mb-4">About this scooter</h2>
+              <p className="text-gray-600 mb-6">{mockScooter.description}</p>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center">
                   <UsersIcon className="h-5 w-5 text-gray-400 mr-2" />
-                  <span className="text-sm text-gray-600">{mockCar.features.seats} seats</span>
+                  <span className="text-sm text-gray-600">{mockScooter.features.weightCapacity} lbs capacity</span>
                 </div>
                 <div className="flex items-center">
                   <CogIcon className="h-5 w-5 text-gray-400 mr-2" />
-                  <span className="text-sm text-gray-600">{mockCar.features.transmission}</span>
+                  <span className="text-sm text-gray-600">{mockScooter.features.batteryType}</span>
                 </div>
                 <div className="flex items-center">
                   <FireIcon className="h-5 w-5 text-gray-400 mr-2" />
-                  <span className="text-sm text-gray-600">{mockCar.features.fuel}</span>
+                  <span className="text-sm text-gray-600">{mockScooter.features.range} miles range</span>
                 </div>
                 <div className="flex items-center">
-                  <CarIcon className="h-5 w-5 text-gray-400 mr-2" />
-                  <span className="text-sm text-gray-600">{mockCar.features.doors} doors</span>
+                  <KeyIcon className="h-5 w-5 text-gray-400 mr-2" />
+                  <span className="text-sm text-gray-600">{mockScooter.features.category} category</span>
                 </div>
               </div>
 
               <div className="border-t pt-6">
                 <h3 className="text-lg font-semibold mb-3">Guidelines</h3>
                 <ul className="space-y-2">
-                  {mockCar.guidelines.map((guideline, index) => (
+                  {mockScooter.guidelines.map((guideline, index) => (
                     <li key={index} className="flex items-start">
                       <CheckIcon className="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                       <span className="text-sm text-gray-600">{guideline}</span>
@@ -230,26 +231,26 @@ export default function CarDetail() {
 
             {/* Host Info */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold mb-4">Hosted by {mockCar.host.name}</h2>
+              <h2 className="text-xl font-semibold mb-4">Hosted by {mockScooter.host.name}</h2>
               <div className="flex items-center space-x-4">
                 <Image
-                  src={mockCar.host.avatar}
-                  alt={mockCar.host.name}
+                  src={mockScooter.host.avatar}
+                  alt={mockScooter.host.name}
                   width={48}
                   height={48}
                   className="rounded-full"
                 />
                 <div>
-                  <p className="font-medium text-gray-900">{mockCar.host.name}</p>
+                  <p className="font-medium text-gray-900">{mockScooter.host.name}</p>
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>{mockCar.host.trips} trips</span>
+                    <span>{mockScooter.host.trips} trips</span>
                     <span>•</span>
                     <div className="flex items-center">
                       <StarIcon className="h-4 w-4 text-yellow-400" />
-                      <span className="ml-1">{mockCar.host.rating}</span>
+                      <span className="ml-1">{mockScooter.host.rating}</span>
                     </div>
                     <span>•</span>
-                    <span>Responds {mockCar.host.responseTime}</span>
+                    <span>Responds {mockScooter.host.responseTime}</span>
                   </div>
                 </div>
               </div>
@@ -268,7 +269,7 @@ export default function CarDetail() {
                   <span className="ml-2">Map will be displayed here</span>
                 </div>
               </div>
-              <p className="text-sm text-gray-600">{mockCar.location}</p>
+              <p className="text-sm text-gray-600">{mockScooter.location}</p>
             </div>
           </div>
 
@@ -277,7 +278,7 @@ export default function CarDetail() {
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
               <div className="mb-4">
                 <div className="flex items-baseline">
-                  <span className="text-3xl font-bold">${mockCar.price}</span>
+                  <span className="text-3xl font-bold">${mockScooter.price}</span>
                   <span className="text-gray-500 ml-1">/day</span>
                 </div>
               </div>
@@ -285,8 +286,9 @@ export default function CarDetail() {
               {/* Date Selection */}
               <div className="space-y-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Pickup</label>
+                  <label htmlFor="pickup-date" className="block text-sm font-medium text-gray-700 mb-1">Pickup</label>
                   <input
+                    id="pickup-date"
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
@@ -294,8 +296,9 @@ export default function CarDetail() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Return</label>
+                  <label htmlFor="return-date" className="block text-sm font-medium text-gray-700 mb-1">Return</label>
                   <input
+                    id="return-date"
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
@@ -305,11 +308,11 @@ export default function CarDetail() {
               </div>
 
               {/* Extras */}
-              {mockCar.extras.length > 0 && (
+              {mockScooter.extras.length > 0 && (
                 <div className="mb-4">
                   <h3 className="text-sm font-medium text-gray-700 mb-2">Extras</h3>
                   <div className="space-y-2">
-                    {mockCar.extras.map((extra) => (
+                    {mockScooter.extras.map((extra) => (
                       <label key={extra.name} className="flex items-center">
                         <input
                           type="checkbox"
@@ -345,6 +348,18 @@ export default function CarDetail() {
 
               <button
                 disabled={!startDate || !endDate}
+                onClick={() => {
+                  if (startDate && endDate) {
+                    const params = new URLSearchParams({
+                      scooter: `${mockScooter.make} ${mockScooter.model}`,
+                      startDate,
+                      endDate,
+                      price: mockScooter.price.toString(),
+                      total: (calculateTotal() + Math.round(calculateTotal() * 0.1)).toString()
+                    })
+                    window.location.href = `/checkout?${params.toString()}`
+                  }
+                }}
                 className="w-full bg-scoovio-600 text-white py-3 rounded-md font-medium hover:bg-scoovio-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Continue

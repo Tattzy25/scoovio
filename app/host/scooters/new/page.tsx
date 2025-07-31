@@ -10,19 +10,13 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline'
 
-interface CarFormData {
+interface ScooterFormData {
   make: string
   model: string
-  year: string
-  licensePlate: string
-  vin: string
   category: string
-  fuelType: string
-  transmission: string
-  seats: string
-  doors: string
-  color: string
-  mileage: string
+  batteryType: string
+  range: string
+  weightCapacity: string
   features: string[]
   description: string
   dailyPrice: string
@@ -37,39 +31,29 @@ interface CarFormData {
   }
 }
 
-const carMakes = [
-  'Acura', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge',
-  'Ford', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia',
-  'Land Rover', 'Lexus', 'Lincoln', 'Mazda', 'Mercedes-Benz', 'MINI', 'Mitsubishi',
-  'Nissan', 'Porsche', 'Subaru', 'Tesla', 'Toyota', 'Volkswagen', 'Volvo'
+const scooterMakes = [
+  'Pride', 'Drive', 'Golden', 'Merits', 'Shoprider', 'Afikim', 'EWheels', 'Rascal'
 ]
 
-const carFeatures = [
-  'Bluetooth', 'Backup Camera', 'GPS Navigation', 'Sunroof', 'Heated Seats',
-  'Leather Seats', 'Apple CarPlay', 'Android Auto', 'USB Charger', 'Keyless Entry',
-  'Cruise Control', 'Parking Sensors', 'Blind Spot Monitor', 'Lane Assist',
-  'WiFi Hotspot', 'Premium Sound', 'Third Row Seating', 'All-Wheel Drive'
+const scooterFeatures = [
+  'Swivel Seat', 'Adjustable Armrests', 'USB Charger', 'LED Lights', 'Suspension',
+  'Foldable', 'Basket Included', 'Extended Range Battery', 'Keyed Ignition', 'Anti-Tip Wheels'
 ]
 
-const fuelTypes = ['Gasoline', 'Diesel', 'Hybrid', 'Electric', 'Plug-in Hybrid']
-const transmissions = ['Automatic', 'Manual', 'CVT']
-const categories = ['Economy', 'Compact', 'Mid-size', 'Full-size', 'Luxury', 'SUV', 'Van', 'Convertible']
+const batteryTypes = ['Lead-Acid', 'Lithium-Ion']
+const scooterCategories = ['Lightweight', 'Standard', 'Heavy-Duty', 'XL']
+const weightCapacities = ['150 lbs', '250 lbs', '300 lbs', '400 lbs', '500 lbs']
+const states = ['CA', 'NY', 'TX', 'FL']
 
-export default function NewCarListing() {
+export default function NewScooterListing() {
   const [step, setStep] = useState(1)
-  const [formData, setFormData] = useState<CarFormData>({
+  const [formData, setFormData] = useState<ScooterFormData>({
     make: '',
     model: '',
-    year: '',
-    licensePlate: '',
-    vin: '',
     category: '',
-    fuelType: '',
-    transmission: '',
-    seats: '',
-    doors: '',
-    color: '',
-    mileage: '',
+    batteryType: '',
+    range: '',
+    weightCapacity: '',
     features: [],
     description: '',
     dailyPrice: '',
@@ -151,7 +135,7 @@ export default function NewCarListing() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             {[
-              { step: 1, label: 'Car Details' },
+              { step: 1, label: 'Scooter Details' },
               { step: 2, label: 'Features & Description' },
               { step: 3, label: 'Pricing & Location' },
               { step: 4, label: 'Photos & Availability' }
@@ -180,10 +164,10 @@ export default function NewCarListing() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Step 1: Car Details */}
+          {/* Step 1: Scooter Details */}
           {step === 1 && (
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Car Details</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Scooter Details</h2>
               
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
@@ -196,7 +180,7 @@ export default function NewCarListing() {
                     required
                   >
                     <option value="">Select make</option>
-                    {carMakes.map(make => (
+                    {scooterMakes.map(make => (
                       <option key={make} value={make}>{make}</option>
                     ))}
                   </select>
@@ -210,25 +194,9 @@ export default function NewCarListing() {
                     value={formData.model}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    placeholder="e.g., Civic, Model 3, X5"
+                    placeholder="e.g., Victory 10"
                     required
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
-                  <select
-                    name="year"
-                    value={formData.year}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    required
-                  >
-                    <option value="">Select year</option>
-                    {Array.from({ length: 24 }, (_, i) => 2024 - i).map(year => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
-                  </select>
                 </div>
 
                 <div>
@@ -241,126 +209,57 @@ export default function NewCarListing() {
                     required
                   >
                     <option value="">Select category</option>
-                    {categories.map(category => (
-                      <option key={category} value={category}>{category}</option>
+                    {scooterCategories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">License Plate</label>
-                  <input
-                    type="text"
-                    name="licensePlate"
-                    value={formData.licensePlate}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    placeholder="ABC123"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">VIN</label>
-                  <input
-                    type="text"
-                    name="vin"
-                    value={formData.vin}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    placeholder="17 characters"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Battery Type</label>
                   <select
-                    name="fuelType"
-                    value={formData.fuelType}
+                    name="batteryType"
+                    value={formData.batteryType}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
                     required
                   >
-                    <option value="">Select fuel type</option>
-                    {fuelTypes.map(type => (
+                    <option value="">Select battery type</option>
+                    {batteryTypes.map(type => (
                       <option key={type} value={type}>{type}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
-                  <select
-                    name="transmission"
-                    value={formData.transmission}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    required
-                  >
-                    <option value="">Select transmission</option>
-                    {transmissions.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Seats</label>
-                  <select
-                    name="seats"
-                    value={formData.seats}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    required
-                  >
-                    <option value="">Select seats</option>
-                    {[2, 3, 4, 5, 6, 7, 8, 9].map(seats => (
-                      <option key={seats} value={seats}>{seats} seats</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Doors</label>
-                  <select
-                    name="doors"
-                    value={formData.doors}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    required
-                  >
-                    <option value="">Select doors</option>
-                    {[2, 3, 4, 5].map(doors => (
-                      <option key={doors} value={doors}>{doors} doors</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Color</label>
-                  <input
-                    type="text"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    placeholder="e.g., Black, White, Blue"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Current Mileage</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Range (miles per charge)</label>
                   <input
                     type="number"
-                    name="mileage"
-                    value={formData.mileage}
+                    name="range"
+                    value={formData.range}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                    placeholder="e.g., 25000"
+                    placeholder="15"
+                    min="5"
+                    max="50"
                     required
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Weight Capacity</label>
+                  <select
+                    name="weightCapacity"
+                    value={formData.weightCapacity}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
+                    required
+                  >
+                    <option value="">Select capacity</option>
+                    {weightCapacities.map(capacity => (
+                      <option key={capacity} value={capacity}>{capacity}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
@@ -376,7 +275,7 @@ export default function NewCarListing() {
                   Features (select all that apply)
                 </label>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {carFeatures.map(feature => (
+                  {scooterFeatures.map(feature => (
                     <label key={feature} className="flex items-center">
                       <input
                         type="checkbox"
@@ -400,7 +299,7 @@ export default function NewCarListing() {
                   onChange={handleInputChange}
                   rows={4}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scoovio-500"
-                  placeholder="Tell guests about your car..."
+                  placeholder="Tell guests about your scooter..."
                   required
                 />
               </div>
@@ -526,7 +425,7 @@ export default function NewCarListing() {
                       <div key={index} className="relative">
                         <img
                           src={URL.createObjectURL(file)}
-                          alt={`Car ${index + 1}`}
+                          alt={`Scooter ${index + 1}`}
                           className="h-24 w-24 object-cover rounded-lg"
                         />
                         <button
@@ -603,7 +502,7 @@ export default function NewCarListing() {
                 type="submit"
                 className="px-4 py-2 bg-scoovio-600 text-white rounded-md text-sm font-medium hover:bg-scoovio-700"
               >
-                List Car
+                List Scooter
               </button>
             )}
           </div>

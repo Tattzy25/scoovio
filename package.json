@@ -1,7 +1,7 @@
 {
   "name": "scoovio",
   "version": "0.1.0",
-  "description": "Scoovio - A peer-to-peer car sharing platform",
+  "description": "Scoovio - A peer-to-peer scooter sharing platform",
   "private": true,
   "scripts": {
     "dev": "next dev",

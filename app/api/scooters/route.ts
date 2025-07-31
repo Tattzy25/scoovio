@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-interface Car {
+interface Scooter {
   id: string
   make: string
   model: string
@@ -23,11 +23,11 @@ interface Car {
   reviews: number
 }
 
-const mockCars: Car[] = [
+const mockScooters: Scooter[] = [
   {
     id: '1',
-    make: 'Tesla',
-    model: 'Model 3',
+    make: 'Vespa',
+    model: 'Primavera',
     year: 2023,
     price: 89,
     location: 'San Francisco, CA',
@@ -48,8 +48,8 @@ const mockCars: Car[] = [
   },
   {
     id: '2',
-    make: 'BMW',
-    model: 'X5',
+    make: 'Honda',
+    model: 'PCX',
     year: 2022,
     price: 120,
     location: 'Los Angeles, CA',
@@ -70,8 +70,8 @@ const mockCars: Car[] = [
   },
   {
     id: '3',
-    make: 'Honda',
-    model: 'Civic',
+    make: 'Yamaha',
+    model: 'AeroX',
     year: 2021,
     price: 45,
     location: 'New York, NY',
@@ -101,35 +101,35 @@ export async function GET(request: NextRequest) {
   const seats = searchParams.get('seats')
   const fuel = searchParams.get('fuel')
 
-  let filteredCars = mockCars
+  let filteredScooters = mockScooters
 
   if (location) {
-    filteredCars = filteredCars.filter(car => 
-      car.location.toLowerCase().includes(location.toLowerCase())
+    filteredScooters = filteredScooters.filter(scooter => 
+      scooter.location.toLowerCase().includes(location.toLowerCase())
     )
   }
 
   if (minPrice) {
-    filteredCars = filteredCars.filter(car => car.price >= parseInt(minPrice))
+    filteredScooters = filteredScooters.filter(scooter => scooter.price >= parseInt(minPrice))
   }
 
   if (maxPrice) {
-    filteredCars = filteredCars.filter(car => car.price <= parseInt(maxPrice))
+    filteredScooters = filteredScooters.filter(scooter => scooter.price <= parseInt(maxPrice))
   }
 
   if (transmission) {
-    filteredCars = filteredCars.filter(car => car.features.transmission === transmission)
+    filteredScooters = filteredScooters.filter(scooter => scooter.features.transmission === transmission)
   }
 
   if (seats) {
-    filteredCars = filteredCars.filter(car => car.features.seats >= parseInt(seats))
+    filteredScooters = filteredScooters.filter(scooter => scooter.features.seats >= parseInt(seats))
   }
 
   if (fuel) {
-    filteredCars = filteredCars.filter(car => car.features.fuel === fuel)
+    filteredScooters = filteredScooters.filter(scooter => scooter.features.fuel === fuel)
   }
 
-  return NextResponse.json({ cars: filteredCars })
+  return NextResponse.json({ scooters: filteredScooters })
 }
 
 export async function POST(request: NextRequest) {
@@ -145,8 +145,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create new car (mock)
-    const newCar: Car = {
+    // Create new scooter (mock)
+    const newScooter: Scooter = {
       id: Date.now().toString(),
       make,
       model,
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
       reviews: 0
     }
 
-    return NextResponse.json({ car: newCar }, { status: 201 })
+    return NextResponse.json({ scooter: newScooter }, { status: 201 })
   } catch (error) {
     return NextResponse.json(
       { error: 'Invalid request body' },

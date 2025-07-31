@@ -16,7 +16,7 @@ import {
 
 interface Booking {
   id: string
-  car: {
+  scooter: {
     make: string
     model: string
     year: number
@@ -33,9 +33,9 @@ interface Booking {
 const mockBookings: Booking[] = [
   {
     id: '1',
-    car: {
-      make: 'Tesla',
-      model: 'Model 3',
+    scooter: {
+      make: 'Vespa',
+      model: 'Primavera',
       year: 2023,
       image: '/api/placeholder/300/200',
       host: 'John D.'
@@ -48,9 +48,9 @@ const mockBookings: Booking[] = [
   },
   {
     id: '2',
-    car: {
-      make: 'BMW',
-      model: 'X5',
+    scooter: {
+      make: 'Honda',
+      model: 'PCX',
       year: 2022,
       image: '/api/placeholder/300/200',
       host: 'Sarah M.'
@@ -128,17 +128,17 @@ export default function UserDashboard() {
                   <div key={booking.id} className="p-6">
                     <div className="flex items-center space-x-4">
                       <img
-                        src={booking.car.image}
-                        alt={`${booking.car.make} ${booking.car.model}`}
+                        src={booking.scooter.image}
+                        alt={`${booking.scooter.make} ${booking.scooter.model}`}
                         className="h-20 w-32 rounded-lg object-cover"
                       />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
                             <h4 className="text-lg font-medium text-gray-900">
-                              {booking.car.year} {booking.car.make} {booking.car.model}
+                              {booking.scooter.year} {booking.scooter.make} {booking.scooter.model}
                             </h4>
-                            <p className="text-sm text-gray-500">Hosted by {booking.car.host}</p>
+                            <p className="text-sm text-gray-500">Hosted by {booking.scooter.host}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-lg font-semibold text-gray-900">${booking.total}</p>
@@ -185,17 +185,17 @@ export default function UserDashboard() {
                   <div key={booking.id} className="p-6">
                     <div className="flex items-center space-x-4">
                       <img
-                        src={booking.car.image}
-                        alt={`${booking.car.make} ${booking.car.model}`}
+                        src={booking.scooter.image}
+                        alt={`${booking.scooter.make} ${booking.scooter.model}`}
                         className="h-20 w-32 rounded-lg object-cover"
                       />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
                             <h4 className="text-lg font-medium text-gray-900">
-                              {booking.car.year} {booking.car.make} {booking.car.model}
+                              {booking.scooter.year} {booking.scooter.make} {booking.scooter.model}
                             </h4>
-                            <p className="text-sm text-gray-500">Hosted by {booking.car.host}</p>
+                            <p className="text-sm text-gray-500">Hosted by {booking.scooter.host}</p>
                           </div>
                           <div className="text-right">
                             <p className="text-lg font-semibold text-gray-900">${booking.total}</p>
@@ -234,20 +234,20 @@ export default function UserDashboard() {
         {selectedTab === 'favorites' && (
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">Favorite Cars</h3>
+              <h3 className="text-lg font-medium text-gray-900">Favorite Scooters</h3>
             </div>
             <div className="p-6">
               <div className="text-center py-12">
                 <StarIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No favorites yet</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  Start exploring cars and save your favorites for easy booking.
+                  Start exploring scooters and save your favorites for easy booking.
                 </p>
                 <Link
                   href="/search"
                   className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-scoovio-600 hover:bg-scoovio-700"
                 >
-                  Browse cars
+                  Browse scooters
                 </Link>
               </div>
             </div>

@@ -15,7 +15,7 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 
-interface Car {
+interface Scooter {
   id: string
   make: string
   model: string
@@ -28,37 +28,37 @@ interface Car {
   earnings: number
 }
 
-const mockCars: Car[] = [
+const mockScooters: Scooter[] = [
   {
     id: '1',
-    make: 'Tesla',
-    model: 'Model 3',
+    make: 'Vespa',
+    model: 'Primavera',
     year: 2023,
-    price: 89,
+    price: 49,
     location: 'San Francisco, CA',
     image: '/api/placeholder/300/200',
     status: 'active',
     bookings: 12,
-    earnings: 1068
+    earnings: 588
   },
   {
     id: '2',
-    make: 'BMW',
-    model: 'X5',
+    make: 'Honda',
+    model: 'PCX',
     year: 2022,
-    price: 120,
+    price: 65,
     location: 'Los Angeles, CA',
     image: '/api/placeholder/300/200',
     status: 'active',
     bookings: 8,
-    earnings: 960
+    earnings: 520
   },
   {
     id: '3',
-    make: 'Honda',
-    model: 'Civic',
+    make: 'Yamaha',
+    model: 'Aerox',
     year: 2021,
-    price: 45,
+    price: 35,
     location: 'San Diego, CA',
     image: '/api/placeholder/300/200',
     status: 'pending',
@@ -68,30 +68,30 @@ const mockCars: Car[] = [
 ]
 
 export default function HostDashboard() {
-  const [cars, setCars] = useState<Car[]>(mockCars)
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'cars' | 'bookings' | 'earnings'>('overview')
+  const [scooters, setScooters] = useState<Scooter[]>(mockScooters)
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'scooters' | 'bookings' | 'earnings'>('overview')
 
-  const totalEarnings = cars.reduce((sum, car) => sum + car.earnings, 0)
-  const totalBookings = cars.reduce((sum, car) => sum + car.bookings, 0)
-  const activeCars = cars.filter(car => car.status === 'active').length
+  const totalEarnings = scooters.reduce((sum, scooter) => sum + scooter.earnings, 0)
+  const totalBookings = scooters.reduce((sum, scooter) => sum + scooter.bookings, 0)
+  const activeScooters = scooters.filter(scooter => scooter.status === 'active').length
 
   const upcomingBookings = [
     {
       id: '1',
-      car: 'Tesla Model 3',
+      scooter: 'Vespa Primavera',
       guest: 'John Doe',
       startDate: '2024-01-15',
       endDate: '2024-01-18',
-      total: 267,
+      total: 147,
       status: 'confirmed'
     },
     {
       id: '2',
-      car: 'BMW X5',
+      scooter: 'Honda PCX',
       guest: 'Jane Smith',
       startDate: '2024-01-20',
       endDate: '2024-01-22',
-      total: 240,
+      total: 130,
       status: 'pending'
     }
   ]
@@ -112,11 +112,11 @@ export default function HostDashboard() {
                 <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
               </button>
               <Link
-                href="/host/cars/new"
+                href="/host/scooters/new"
                 className="flex items-center px-4 py-2 bg-scoovio-600 text-white rounded-md hover:bg-scoovio-700"
               >
                 <PlusIcon className="h-5 w-5 mr-2" />
-                List a car
+                List a scooter
               </Link>
             </div>
           </div>
@@ -156,8 +156,8 @@ export default function HostDashboard() {
                 <CarIcon className="h-8 w-8 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Cars</p>
-                <p className="text-2xl font-bold text-gray-900">{activeCars}</p>
+                <p className="text-sm font-medium text-gray-500">Active Scooters</p>
+                <p className="text-2xl font-bold text-gray-900">{activeScooters}</p>
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function HostDashboard() {
           <nav className="-mb-px flex space-x-8">
             {[
               { id: 'overview', label: 'Overview' },
-              { id: 'cars', label: 'My Cars' },
+              { id: 'scooters', label: 'My Scooters' },
               { id: 'bookings', label: 'Bookings' },
               { id: 'earnings', label: 'Earnings' }
             ].map((tab) => (
@@ -199,7 +199,7 @@ export default function HostDashboard() {
                   {upcomingBookings.map((booking) => (
                     <div key={booking.id} className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{booking.car}</p>
+                        <p className="text-sm font-medium text-gray-900">{booking.scooter}</p>
                         <p className="text-sm text-gray-500">{booking.guest}</p>
                         <p className="text-xs text-gray-400">
                           {booking.startDate} - {booking.endDate}
@@ -225,12 +225,12 @@ export default function HostDashboard() {
               </div>
               <div className="p-6 space-y-4">
                 <Link
-                  href="/host/cars/new"
+                  href="/host/scooters/new"
                   className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
                 >
                   <PlusIcon className="h-8 w-8 text-scoovio-600 mr-4" />
                   <div>
-                    <p className="font-medium text-gray-900">List a new car</p>
+                    <p className="font-medium text-gray-900">List a new scooter</p>
                     <p className="text-sm text-gray-500">Start earning with another vehicle</p>
                   </div>
                 </Link>
@@ -261,17 +261,17 @@ export default function HostDashboard() {
           </div>
         )}
 
-        {selectedTab === 'cars' && (
+        {selectedTab === 'scooters' && (
           <div className="bg-white rounded-lg shadow">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">Your Cars</h3>
+              <h3 className="text-lg font-medium text-gray-900">Your Scooters</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Car
+                      Scooter
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Location
@@ -291,39 +291,39 @@ export default function HostDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {cars.map((car) => (
-                    <tr key={car.id}>
+                  {scooters.map((scooter) => (
+                    <tr key={scooter.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <img
                             className="h-10 w-10 rounded-lg object-cover"
-                            src={car.image}
-                            alt={`${car.make} ${car.model}`}
+                            src={scooter.image}
+                            alt={`${scooter.make} ${scooter.model}`}
                           />
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {car.year} {car.make} {car.model}
+                              {scooter.year} {scooter.make} {scooter.model}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {car.location}
+                        {scooter.location}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ${car.price}
+                        ${scooter.price}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          car.status === 'active' ? 'bg-green-100 text-green-800' :
-                          car.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          scooter.status === 'active' ? 'bg-green-100 text-green-800' :
+                          scooter.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
-                          {car.status}
+                          {scooter.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {car.bookings}
+                        {scooter.bookings}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
@@ -356,7 +356,7 @@ export default function HostDashboard() {
                 <CalendarDaysIcon className="mx-auto h-12 w-12 text-gray-400" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No bookings yet</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  Bookings will appear here when guests reserve your cars.
+                  Bookings will appear here when guests reserve your scooters.
                 </p>
               </div>
             </div>

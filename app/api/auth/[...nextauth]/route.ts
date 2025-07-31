@@ -2,6 +2,30 @@ import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { NextAuthOptions } from 'next-auth'
 
+// Extend the User type to include role and id
+declare module 'next-auth' {
+  interface User {
+    id: string
+    role: string
+  }
+  
+  interface Session {
+    user: {
+      id: string
+      name?: string | null
+      email?: string | null
+      image?: string | null
+      role: string
+    }
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    role: string
+  }
+}
+
 const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -51,8 +75,7 @@ const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: '/login',
-    signUp: '/signup'
+    signIn: '/login'
   }
 }
 

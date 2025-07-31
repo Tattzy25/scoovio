@@ -10,11 +10,11 @@ export default function Home() {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
-  const featuredCars = [
+  const featuredScooters = [
     {
       id: 1,
-      make: 'Tesla',
-      model: 'Model 3',
+      make: 'Vespa',
+      model: 'Primavera',
       year: 2023,
       price: 89,
       rating: 4.9,
@@ -24,8 +24,8 @@ export default function Home() {
     },
     {
       id: 2,
-      make: 'BMW',
-      model: 'X5',
+      make: 'Honda',
+      model: 'PCX',
       year: 2023,
       price: 129,
       rating: 4.8,
@@ -35,8 +35,8 @@ export default function Home() {
     },
     {
       id: 3,
-      make: 'Honda',
-      model: 'Civic',
+      make: 'Yamaha',
+      model: 'AeroX',
       year: 2022,
       price: 45,
       rating: 4.7,
@@ -46,8 +46,8 @@ export default function Home() {
     },
     {
       id: 4,
-      make: 'Porsche',
-      model: '911',
+      make: 'Piaggio',
+      model: 'Liberty',
       year: 2023,
       price: 299,
       rating: 5.0,
@@ -78,10 +78,10 @@ export default function Home() {
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Skip the rental car counter
+              Skip the rental scooter counter
             </h1>
             <p className="mt-6 text-xl text-scoovio-100">
-              Book better cars from trusted, local hosts
+              Book better mobility scooters from trusted, local hosts
             </p>
           </div>
 
@@ -142,7 +142,7 @@ export default function Home() {
                   className="w-full bg-scoovio-600 text-white py-3 px-4 rounded-md hover:bg-scoovio-700 transition-colors flex items-center justify-center"
                 >
                   <MagnifyingGlassIcon className="h-5 w-5 mr-2" />
-                  Search cars
+                  Search scooters
                 </button>
               </div>
             </form>
@@ -150,21 +150,21 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Featured Cars */}
+      {/* Featured Scooters */}
       <div className="bg-gray-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Featured cars</h2>
-            <p className="mt-2 text-lg text-gray-600">Browse our most popular vehicles</p>
+            <h2 className="text-3xl font-bold text-gray-900">Featured scooters</h2>
+            <p className="mt-2 text-lg text-gray-600">Browse our most popular mobility scooters</p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredCars.map((car) => (
-              <div key={car.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            {featuredScooters.map((scooter) => (
+              <div key={scooter.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <Image
-                    src={car.image}
-                    alt={`${car.make} ${car.model}`}
+                    src={scooter.image}
+                    alt={`${scooter.make} ${scooter.model}`}
                     width={300}
                     height={200}
                     className="w-full h-48 object-cover"
@@ -178,9 +178,9 @@ export default function Home() {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {car.year} {car.make} {car.model}
+                        {scooter.year} {scooter.make} {scooter.model}
                       </h3>
-                      <p className="text-sm text-gray-600">{car.location}</p>
+                      <p className="text-sm text-gray-600">{scooter.location}</p>
                     </div>
                   </div>
                   
@@ -188,11 +188,11 @@ export default function Home() {
                     <div className="flex items-center">
                       <StarIcon className="h-4 w-4 text-yellow-400 fill-current" />
                       <span className="ml-1 text-sm text-gray-600">
-                        {car.rating} ({car.trips} trips)
+                        {scooter.rating} ({scooter.trips} trips)
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-2xl font-bold text-gray-900">${car.price}</span>
+                      <span className="text-2xl font-bold text-gray-900">${scooter.price}</span>
                       <span className="text-sm text-gray-600">/day</span>
                     </div>
                   </div>
@@ -206,7 +206,7 @@ export default function Home() {
               href="/search"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-scoovio-700 bg-scoovio-100 hover:bg-scoovio-200"
             >
-              View all cars
+              View all scooters
             </Link>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function Home() {
               </div>
               <h3 className="mt-4 text-lg font-medium text-gray-900">Skip the counter</h3>
               <p className="mt-2 text-base text-gray-600">
-                Book cars directly from local hosts and skip the rental counter lines
+                Book scooters directly from local hosts and skip the rental counter lines
               </p>
             </div>
 
@@ -244,9 +244,9 @@ export default function Home() {
               <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-md bg-scoovio-600 text-white">
                 <StarIcon className="h-6 w-6" />
               </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">Better cars</h3>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Better scooters</h3>
               <p className="mt-2 text-base text-gray-600">
-                Choose from thousands of unique cars in your neighborhood
+                Choose from thousands of unique mobility scooters in your neighborhood
               </p>
             </div>
 
@@ -268,10 +268,10 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
-              Turn your car into extra income
+              Turn your mobility scooter into extra income
             </h2>
             <p className="mt-4 text-xl text-gray-300">
-              List your car on Scoovio and earn up to $1,000 per month
+              List your mobility scooter on Scoovio and earn up to $500 per month
             </p>
             <div className="mt-8">
               <Link

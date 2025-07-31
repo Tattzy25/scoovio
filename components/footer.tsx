@@ -33,7 +33,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               <li>
                 <a href="/host" className="text-sm text-gray-600 hover:text-gray-900">
-                  Share your car
+                  Share your scooter
                 </a>
               </li>
               <li>

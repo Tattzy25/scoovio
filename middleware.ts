@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const path = request.nextpathname
+  const path = request.nextUrl.pathname
   
   // Protected routes that require authentication
   const protectedRoutes = [
     '/dashboard',
     '/checkout',
     '/host/dashboard',
-    '/host/cars/new'
+    '/host/scooters/new'
   ]
   
   const isProtectedRoute = protectedRoutes.some(route => 

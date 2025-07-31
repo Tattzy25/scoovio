@@ -21,7 +21,7 @@ export function Navigation() {
 
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/search" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-              Find cars
+              Find scooters
             </Link>
             <Link href="/host" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
               Become a host
@@ -39,7 +39,7 @@ export function Navigation() {
               href="/host/signup" 
               className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
             >
-              List your car
+              List your scooter
             </Link>
             <Link 
               href="/login"
@@ -83,7 +83,7 @@ export function Navigation() {
               href="/search"
               className="text-gray-700 hover:text-gray-900 block px-3 py-2 text-base font-medium"
             >
-              Find cars
+              Find scooters
             </Link>
             <Link
               href="/host"

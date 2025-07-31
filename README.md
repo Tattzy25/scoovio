@@ -1,21 +1,21 @@
-# Scoovio - Peer-to-Peer Car Sharing Platform
+# Scoovio - Peer-to-Peer Scooter Sharing Platform
 
-A complete clone of Turo.com built with Next.js 14, TypeScript, and modern web technologies. Scoovio enables car owners to rent out their vehicles and travelers to find unique cars for their trips.
+A complete clone of Turo.com built with Next.js 14, TypeScript, and modern web technologies. Scoovio enables scooter owners to rent out their vehicles and travelers to find unique scooters for their trips.
 
 ## 🚀 Features
 
 ### User Features
-- **Browse & Search**: Advanced filtering for cars by location, price, features
-- **Car Details**: Comprehensive car information with high-quality images
+- **Browse & Search**: Advanced filtering for scooters by location, price, features
+- **Scooter Details**: Comprehensive scooter information with high-quality images
 - **Booking System**: Seamless booking flow with calendar integration
 - **User Dashboard**: Manage bookings, favorites, and profile
-- **Reviews & Ratings**: Rate and review cars and hosts
+- **Reviews & Ratings**: Rate and review scooters and hosts
 - **Secure Payments**: Stripe integration for safe transactions
 
 ### Host Features
 - **Host Registration**: Complete onboarding for new hosts
-- **Car Listing**: Add and manage car listings with photos
-- **Host Dashboard**: Track earnings, bookings, and car performance
+- **Scooter Listing**: Add and manage scooter listings with photos
+- **Host Dashboard**: Track earnings, bookings, and scooter performance
 - **Booking Management**: Approve or decline booking requests
 - **Calendar Management**: Set availability and pricing
 
@@ -107,7 +107,7 @@ scoovio/
 ├── app/
 │   ├── api/
 │   │   ├── auth/[...nextauth]/     # Authentication API
-│   │   ├── cars/                   # Car management API
+│   │   ├── scooters/                   # Scooter management API
 │   │   ├── bookings/               # Booking management API
 │   │   └── uploads/                # File upload API
 │   ├── auth/
@@ -116,11 +116,11 @@ scoovio/
 │   ├── host/
 │   │   ├── signup/                 # Host registration
 │   │   ├── dashboard/              # Host dashboard
-│   │   └── cars/
-│   │       └── new/                # Add new car
+│   │   └── scooters/
+│   │       └── new/                # Add new scooter
 │   ├── dashboard/                  # User dashboard
-│   ├── search/                     # Car search
-│   ├── cars/[id]/                  # Car details
+│   ├── search/                     # Scooter search
+│   ├── scooters/[id]/                  # Scooter details
 │   ├── checkout/                   # Booking checkout
 │   └── globals.css                 # Global styles
 ├── components/
@@ -139,16 +139,16 @@ scoovio/
 ## 🎯 Key Pages
 
 ### User Flow
-1. **Homepage** (`/`) - Hero search, featured cars
-2. **Search** (`/search`) - Advanced car search with filters
-3. **Car Details** (`/cars/[id]`) - Individual car page with booking
+1. **Homepage** (`/`) - Hero search, featured scooters
+2. **Search** (`/search`) - Advanced scooter search with filters
+3. **Scooter Details** (`/scooters/[id]`) - Individual scooter page with booking
 4. **Checkout** (`/checkout`) - Secure booking process
 5. **Dashboard** (`/dashboard`) - User bookings and profile
 
 ### Host Flow
 1. **Host Signup** (`/host/signup`) - Host registration
 2. **Host Dashboard** (`/host/dashboard`) - Manage listings and earnings
-3. **Add Car** (`/host/cars/new`) - List new car
+3. **Add Scooter** (`/host/scooters/new`) - List new scooter
 
 ## 🔐 Authentication
 
@@ -184,10 +184,10 @@ docker run -p 3000:3000 scoovio
 
 ### Core Entities
 - **User**: Authentication and profile
-- **Car**: Vehicle listings
+- **Scooter**: Vehicle listings
 - **Booking**: Trip reservations
 - **Host**: Host profiles and verification
-- **Review**: User and car reviews
+- **Review**: User and scooter reviews
 - **Payment**: Transaction records
 
 ## 🧪 Testing

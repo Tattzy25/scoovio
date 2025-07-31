@@ -7,9 +7,9 @@ import { Footer } from '@/components/footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Scoovio - Car rentals, reimagined',
-  description: 'Skip the rental car counter and book better cars from trusted, local hosts.',
-  keywords: 'car rental, car sharing, peer to peer car rental, vehicle rental',
+  title: 'Scoovio - Mobility scooter rentals, reimagined',
+  description: 'Skip the rental counter and book better mobility scooters from trusted, local hosts.',
+  keywords: 'mobility scooter rental, scooter sharing, peer to peer scooter rental, mobility rental',
 }
 
 export default function RootLayout({

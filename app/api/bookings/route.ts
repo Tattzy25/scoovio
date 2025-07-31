@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from 'next/server'
 interface Booking {
   id: string
   userId: string
-  carId: string
+  scooterId: string
   startDate: string
   endDate: string
   pickupLocation: string
   total: number
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled'
-  car: {
+  scooter: {
     make: string
     model: string
     year: number
@@ -25,15 +25,15 @@ const mockBookings: Booking[] = [
   {
     id: '1',
     userId: '1',
-    carId: '1',
+    scooterId: '1',
     startDate: '2024-01-20',
     endDate: '2024-01-25',
     pickupLocation: 'San Francisco, CA',
     total: 445,
     status: 'confirmed',
-    car: {
-      make: 'Tesla',
-      model: 'Model 3',
+    scooter: {
+      make: 'Vespa',
+      model: 'Primavera',
       year: 2023,
       image: '/api/placeholder/300/200'
     },
@@ -45,15 +45,15 @@ const mockBookings: Booking[] = [
   {
     id: '2',
     userId: '1',
-    carId: '2',
+    scooterId: '2',
     startDate: '2024-01-15',
     endDate: '2024-01-18',
     pickupLocation: 'Los Angeles, CA',
     total: 360,
     status: 'completed',
-    car: {
-      make: 'BMW',
-      model: 'X5',
+    scooter: {
+      make: 'Honda',
+      model: 'PCX',
       year: 2022,
       image: '/api/placeholder/300/200'
     },
@@ -85,10 +85,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { userId, carId, startDate, endDate, pickupLocation, total, extras } = body
+    const { userId, scooterId, startDate, endDate, pickupLocation, total, extras } = body
 
     // Validate required fields
-    if (!userId || !carId || !startDate || !endDate || !pickupLocation || !total) {
+    if (!userId || !scooterId || !startDate || !endDate || !pickupLocation || !total) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -99,15 +99,15 @@ export async function POST(request: NextRequest) {
     const newBooking: Booking = {
       id: Date.now().toString(),
       userId,
-      carId,
+      scooterId,
       startDate,
       endDate,
       pickupLocation,
       total,
       status: 'confirmed',
-      car: {
-        make: 'Tesla',
-        model: 'Model 3',
+      scooter: {
+        make: 'Vespa',
+        model: 'Primavera',
         year: 2023,
         image: '/api/placeholder/300/200'
       },
