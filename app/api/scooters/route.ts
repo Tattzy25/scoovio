@@ -1,96 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-interface Scooter {
-  id: string
-  make: string
-  model: string
-  year: number
-  price: number
-  location: string
-  images: string[]
-  features: {
-    seats: number
-    transmission: string
-    fuel: string
-    doors: number
-  }
-  host: {
-    name: string
-    rating: number
-    trips: number
-  }
-  rating: number
-  reviews: number
-}
-
-const mockScooters: Scooter[] = [
-  {
-    id: '1',
-    make: 'Vespa',
-    model: 'Primavera',
-    year: 2023,
-    price: 89,
-    location: 'San Francisco, CA',
-    images: ['/api/placeholder/300/200'],
-    features: {
-      seats: 5,
-      transmission: 'Automatic',
-      fuel: 'Electric',
-      doors: 4
-    },
-    host: {
-      name: 'Alex Chen',
-      rating: 4.9,
-      trips: 312
-    },
-    rating: 4.9,
-    reviews: 127
-  },
-  {
-    id: '2',
-    make: 'Honda',
-    model: 'PCX',
-    year: 2022,
-    price: 120,
-    location: 'Los Angeles, CA',
-    images: ['/api/placeholder/300/200'],
-    features: {
-      seats: 7,
-      transmission: 'Automatic',
-      fuel: 'Gasoline',
-      doors: 4
-    },
-    host: {
-      name: 'Sarah Miller',
-      rating: 4.8,
-      trips: 156
-    },
-    rating: 4.8,
-    reviews: 89
-  },
-  {
-    id: '3',
-    make: 'Yamaha',
-    model: 'AeroX',
-    year: 2021,
-    price: 45,
-    location: 'New York, NY',
-    images: ['/api/placeholder/300/200'],
-    features: {
-      seats: 5,
-      transmission: 'Automatic',
-      fuel: 'Gasoline',
-      doors: 4
-    },
-    host: {
-      name: 'Mike Johnson',
-      rating: 4.7,
-      trips: 89
-    },
-    rating: 4.7,
-    reviews: 65
-  }
-]
+import { scooters, Scooter } from '@/data/scooters'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -101,7 +10,7 @@ export async function GET(request: NextRequest) {
   const seats = searchParams.get('seats')
   const fuel = searchParams.get('fuel')
 
-  let filteredScooters = mockScooters
+  let filteredScooters = scooters
 
   if (location) {
     filteredScooters = filteredScooters.filter(scooter => 
@@ -155,18 +64,26 @@ export async function POST(request: NextRequest) {
       location,
       images: ['/api/placeholder/300/200'],
       features: {
-        seats: features.seats || 5,
-        transmission: features.transmission || 'Automatic',
-        fuel: features.fuel || 'Gasoline',
-        doors: features.doors || 4
+        seats: features?.seats || 1,
+        transmission: features?.transmission || 'Automatic',
+        fuel: features?.fuel || 'Gasoline',
+        weightCapacity: features?.weightCapacity || 300,
+        batteryType: features?.batteryType || 'Lithium-Ion',
+        range: features?.range || 40,
+        category: features?.category || 'Standard'
       },
       host: {
         name: 'Current User',
+        avatar: '/api/placeholder/48/48',
         rating: 5.0,
         trips: 0
       },
       rating: 0,
-      reviews: 0
+      reviews: 0,
+      trips: 0,
+      description: '',
+      guidelines: [],
+      extras: []
     }
 
     return NextResponse.json({ scooter: newScooter }, { status: 201 })

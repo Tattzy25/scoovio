@@ -1,66 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, UserGroupIcon, StarIcon, ShieldCheckIcon, ClockIcon, HeartIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
+import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, UserGroupIcon, StarIcon, ShieldCheckIcon, ClockIcon, HeartIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import type { Scooter } from '@/data/scooters'
 
 export default function Home() {
   const [searchLocation, setSearchLocation] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [featuredScooters, setFeaturedScooters] = useState<Scooter[]>([])
+  const router = useRouter()
 
-  const featuredScooters = [
-    {
-      id: 1,
-      make: 'Vespa',
-      model: 'Primavera',
-      year: 2023,
-      price: 89,
-      rating: 4.9,
-      trips: 124,
-      image: '/api/placeholder/300/200',
-      location: 'Los Angeles, CA'
-    },
-    {
-      id: 2,
-      make: 'Honda',
-      model: 'PCX',
-      year: 2023,
-      price: 129,
-      rating: 4.8,
-      trips: 89,
-      image: '/api/placeholder/300/200',
-      location: 'San Francisco, CA'
-    },
-    {
-      id: 3,
-      make: 'Yamaha',
-      model: 'AeroX',
-      year: 2022,
-      price: 45,
-      rating: 4.7,
-      trips: 256,
-      image: '/api/placeholder/300/200',
-      location: 'Miami, FL'
-    },
-    {
-      id: 4,
-      make: 'Piaggio',
-      model: 'Liberty',
-      year: 2023,
-      price: 299,
-      rating: 5.0,
-      trips: 45,
-      image: '/api/placeholder/300/200',
-      location: 'New York, NY'
-    }
-  ]
+  useEffect(() => {
+    fetch('/api/scooters')
+      .then(res => res.json())
+      .then(data => setFeaturedScooters(data.scooters.slice(0, 4)))
+      .catch(() => setFeaturedScooters([]))
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Navigate to search results
-    window.location.href = `/search?location=${searchLocation}&start=${startDate}&end=${endDate}`
+    router.push(`/search?location=${searchLocation}&start=${startDate}&end=${endDate}`)
   }
 
   return (
@@ -150,6 +113,41 @@ export default function Home() {
         </div>
       </div>
 
+      {/* How It Works */}
+      <div className="py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900">How Scoovio works</h2>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-full bg-scoovio-600 text-white">
+                <MagnifyingGlassIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Search</h3>
+              <p className="mt-2 text-base text-gray-600">Find scooters near your destination.</p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-full bg-scoovio-600 text-white">
+                <CalendarDaysIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Book</h3>
+              <p className="mt-2 text-base text-gray-600">Choose dates and reserve in seconds.</p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-full bg-scoovio-600 text-white">
+                <CheckCircleIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Ride</h3>
+              <p className="mt-2 text-base text-gray-600">Meet your host and enjoy the ride.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Featured Scooters */}
       <div className="bg-gray-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -163,7 +161,7 @@ export default function Home() {
               <div key={scooter.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <Image
-                    src={scooter.image}
+                    src={scooter.images[0]}
                     alt={`${scooter.make} ${scooter.model}`}
                     width={300}
                     height={200}
