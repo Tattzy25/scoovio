@@ -3,7 +3,17 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, UserGroupIcon, StarIcon, ShieldCheckIcon, ClockIcon, HeartIcon } from '@heroicons/react/24/outline'
+import {
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  CalendarDaysIcon,
+  UserGroupIcon,
+  StarIcon,
+  ShieldCheckIcon,
+  ClockIcon,
+  HeartIcon,
+  BoltIcon
+} from '@heroicons/react/24/outline'
 
 export default function Home() {
   const [searchLocation, setSearchLocation] = useState('')
@@ -81,7 +91,7 @@ export default function Home() {
               Skip the rental scooter counter
             </h1>
             <p className="mt-6 text-xl text-scoovio-100">
-              Book better mobility scooters from trusted, local hosts
+              Book mobility scooters and strollers from trusted local hosts
             </p>
           </div>
 
@@ -142,7 +152,7 @@ export default function Home() {
                   className="w-full bg-scoovio-600 text-white py-3 px-4 rounded-md hover:bg-scoovio-700 transition-colors flex items-center justify-center"
                 >
                   <MagnifyingGlassIcon className="h-5 w-5 mr-2" />
-                  Search scooters
+                  Search rentals
                 </button>
               </div>
             </form>
@@ -201,13 +211,49 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mt-8 text-center">
-            <Link
-              href="/search"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-scoovio-700 bg-scoovio-100 hover:bg-scoovio-200"
-            >
-              View all scooters
-            </Link>
+      <div className="mt-8 text-center">
+        <Link
+          href="/search"
+          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-scoovio-700 bg-scoovio-100 hover:bg-scoovio-200"
+        >
+          View all scooters
+        </Link>
+      </div>
+    </div>
+  </div>
+
+      {/* How It Works */}
+      <div className="py-16 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900">How Scoovio works</h2>
+            <p className="mt-2 text-lg text-gray-600">Renting mobility has never been easier</p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-md bg-scoovio-600 text-white">
+                <MagnifyingGlassIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Browse</h3>
+              <p className="mt-2 text-base text-gray-600">Search thousands of scooters and strollers near you.</p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-md bg-scoovio-600 text-white">
+                <CalendarDaysIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Reserve</h3>
+              <p className="mt-2 text-base text-gray-600">Book in minutes with flexible pickup and dropoff.</p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-md bg-scoovio-600 text-white">
+                <BoltIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Ride</h3>
+              <p className="mt-2 text-base text-gray-600">Enjoy the freedom of effortless mobility on your trip.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -258,6 +304,47 @@ export default function Home() {
               <p className="mt-2 text-base text-gray-600">
                 All hosts are verified and reviewed by our community
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <div className="bg-gray-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900">Loved by riders everywhere</h2>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div className="flex flex-col items-center text-center">
+              <p className="text-lg text-gray-700">&ldquo;Scoovio made our theme park trip effortless. Highly recommend!&rdquo;</p>
+              <div className="mt-4 flex items-center">
+                {[1,2,3,4,5].map((i) => (
+                  <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
+                ))}
+              </div>
+              <p className="mt-2 text-sm text-gray-600">— Jamie L.</p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <p className="text-lg text-gray-700">&ldquo;Listing my scooters has been a great side income.&rdquo;</p>
+              <div className="mt-4 flex items-center">
+                {[1,2,3,4,5].map((i) => (
+                  <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
+                ))}
+              </div>
+              <p className="mt-2 text-sm text-gray-600">— Carlos M.</p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <p className="text-lg text-gray-700">&ldquo;The easiest way to get around conventions without fatigue.&rdquo;</p>
+              <div className="mt-4 flex items-center">
+                {[1,2,3,4,5].map((i) => (
+                  <StarIcon key={i} className="h-5 w-5 text-yellow-400" />
+                ))}
+              </div>
+              <p className="mt-2 text-sm text-gray-600">— Priya S.</p>
             </div>
           </div>
         </div>
