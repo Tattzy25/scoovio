@@ -1,0 +1,280 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  phone         String?
+  dateOfBirth   DateTime?
+  verified      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Authentication
+  accounts      Account[]
+  sessions      Session[]
+
+  // User roles
+  isHost        Boolean   @default(false)
+  hostProfile   HostProfile?
+
+  // User activity
+  bookings      Booking[]
+  reviews       Review[]
+  favorites     Favorite[]
+  messages      Message[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model HostProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  businessName    String?
+  description     String?
+  responseTime    Int?     // in minutes
+  responseRate    Float?   // percentage
+  verified        Boolean  @default(false)
+  verificationDocs String[] // URLs to verification documents
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  equipment       Equipment[]
+
+  @@map("host_profiles")
+}
+
+enum EquipmentType {
+  MOBILITY_SCOOTER
+  BABY_STROLLER
+}
+
+enum EquipmentStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  PENDING_APPROVAL
+}
+
+model Equipment {
+  id              String          @id @default(cuid())
+  type            EquipmentType
+  status          EquipmentStatus @default(PENDING_APPROVAL)
+  
+  // Basic info
+  title           String
+  description     String
+  brand           String
+  model           String
+  year            Int?
+  color           String?
+  
+  // Pricing
+  dailyRate       Float
+  weeklyRate      Float?
+  monthlyRate     Float?
+  securityDeposit Float?
+  
+  // Location
+  address         String
+  city            String
+  state           String
+  zipCode         String
+  latitude        Float?
+  longitude       Float?
+  
+  // Images
+  images          String[]
+  
+  // Availability
+  available       Boolean         @default(true)
+  minRentalDays   Int             @default(1)
+  maxRentalDays   Int?
+  
+  // Equipment-specific attributes (JSON for flexibility)
+  specifications  Json            // Type-specific specs
+  features        Json            // Type-specific features
+  
+  // Metadata
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Relations
+  hostId          String
+  host            HostProfile     @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  bookings        Booking[]
+  reviews         Review[]
+  favorites       Favorite[]
+  unavailableDates UnavailableDate[]
+
+  @@map("equipment")
+}
+
+model UnavailableDate {
+  id          String    @id @default(cuid())
+  equipmentId String
+  startDate   DateTime
+  endDate     DateTime
+  reason      String?   // "booked", "maintenance", "blocked"
+  
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  
+  @@map("unavailable_dates")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  DECLINED
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  status          BookingStatus @default(PENDING)
+  
+  // Dates
+  startDate       DateTime
+  endDate         DateTime
+  
+  // Pricing
+  dailyRate       Float
+  totalDays       Int
+  subtotal        Float
+  serviceFee      Float
+  tax             Float
+  totalAmount     Float
+  securityDeposit Float?
+  
+  // Payment
+  paymentIntentId String?
+  paymentStatus   String?       // "pending", "paid", "refunded"
+  
+  // Delivery/Pickup
+  deliveryAddress String?
+  deliveryFee     Float?
+  pickupNotes     String?
+  returnNotes     String?
+  
+  // Special requirements (equipment-specific)
+  specialRequests Json?
+  
+  // Metadata
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relations
+  userId          String
+  equipmentId     String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  equipment       Equipment     @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  messages        Message[]
+  
+  @@map("bookings")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  rating      Int      // 1-5 stars
+  comment     String?
+  
+  // Review categories (equipment-specific)
+  cleanliness Int?     // 1-5 stars
+  accuracy    Int?     // 1-5 stars
+  condition   Int?     // 1-5 stars
+  communication Int?   // 1-5 stars (for host)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userId      String
+  equipmentId String
+  bookingId   String?  // Optional link to specific booking
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  
+  @@map("reviews")
+}
+
+model Favorite {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  
+  // Relations
+  userId      String
+  equipmentId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, equipmentId])
+  @@map("favorites")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  
+  // Relations
+  senderId  String
+  bookingId String
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  
+  @@map("messages")
+}
+
