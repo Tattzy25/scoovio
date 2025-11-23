@@ -11,59 +11,86 @@ export default function Home() {
   const [searchLocation, setSearchLocation] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<EquipmentType | 'ALL'>('ALL')
 
-  const featuredScooters = [
+  const categories = [
+    { key: 'ALL', label: 'All Equipment', icon: '🔍' },
+    { key: EquipmentType.MOBILITY_SCOOTER, label: 'Mobility Scooters', icon: '🛴' },
+    { key: EquipmentType.BABY_STROLLER, label: 'Baby Strollers', icon: '👶' },
+  ]
+
+  const featuredEquipment = [
+    // Mobility Scooters
     {
       id: 1,
-      make: 'Vespa',
-      model: 'Primavera',
+      type: EquipmentType.MOBILITY_SCOOTER,
+      brand: 'Pride Mobility',
+      model: 'Go-Go Elite',
       year: 2023,
-      price: 89,
+      price: 45,
       rating: 4.9,
       trips: 124,
       image: '/api/placeholder/300/200',
-      location: 'Los Angeles, CA'
+      location: 'Los Angeles, CA',
+      features: ['Foldable', 'LED Lights', '18 mile range']
     },
     {
       id: 2,
-      make: 'Honda',
-      model: 'PCX',
+      type: EquipmentType.MOBILITY_SCOOTER,
+      brand: 'Drive Medical',
+      model: 'Scout Compact',
       year: 2023,
-      price: 129,
+      price: 38,
       rating: 4.8,
       trips: 89,
       image: '/api/placeholder/300/200',
-      location: 'San Francisco, CA'
+      location: 'San Francisco, CA',
+      features: ['Lightweight', 'Storage Basket', '12 mile range']
     },
+    // Baby Strollers
     {
       id: 3,
-      make: 'Yamaha',
-      model: 'AeroX',
-      year: 2022,
-      price: 45,
-      rating: 4.7,
-      trips: 256,
+      type: EquipmentType.BABY_STROLLER,
+      brand: 'UPPAbaby',
+      model: 'Vista V2',
+      year: 2023,
+      price: 25,
+      rating: 4.9,
+      trips: 156,
       image: '/api/placeholder/300/200',
-      location: 'Miami, FL'
+      location: 'Miami, FL',
+      features: ['Reversible Seat', 'Car Seat Compatible', 'Large Storage']
     },
     {
       id: 4,
-      make: 'Piaggio',
-      model: 'Liberty',
+      type: EquipmentType.BABY_STROLLER,
+      brand: 'Bugaboo',
+      model: 'Fox 3',
       year: 2023,
-      price: 299,
+      price: 32,
       rating: 5.0,
       trips: 45,
       image: '/api/placeholder/300/200',
-      location: 'New York, NY'
+      location: 'New York, NY',
+      features: ['All-Terrain', 'One-Hand Fold', 'Adjustable Handlebar']
     }
   ]
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Navigate to search results
-    window.location.href = `/search?location=${searchLocation}&start=${startDate}&end=${endDate}`
+    // Navigate to search results with equipment type filter
+    const params = new URLSearchParams()
+    if (searchLocation) params.set('location', searchLocation)
+    if (startDate) params.set('start', startDate)
+    if (endDate) params.set('end', endDate)
+    if (selectedCategory !== 'ALL') params.set('type', selectedCategory)
+    
+    window.location.href = `/search?${params.toString()}`
   }
+
+  const filteredEquipment = selectedCategory === 'ALL' 
+    ? featuredEquipment 
+    : featuredEquipment.filter(item => item.type === selectedCategory)
 
   return (
     <div className="min-h-screen">
@@ -80,15 +107,36 @@ export default function Home() {
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Skip the rental scooter counter
+              Rent Mobility Equipment
             </h1>
             <p className="mt-6 text-xl text-scoovio-100">
-              Book better mobility scooters from trusted, local hosts
+              Book mobility scooters and baby strollers from trusted, local hosts
             </p>
           </div>
 
+          {/* Equipment Categories */}
+          <div className="mt-8 flex justify-center">
+            <div className="flex space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-2">
+              {categories.map((category) => (
+                <button
+                  key={category.key}
+                  type="button"
+                  onClick={() => setSelectedCategory(category.key as EquipmentType | 'ALL')}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    selectedCategory === category.key
+                      ? 'bg-white text-scoovio-600'
+                      : 'text-white hover:bg-white/20'
+                  }`}
+                >
+                  <span className="mr-2">{category.icon}</span>
+                  {category.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Search Form */}
-          <div className="mt-12 max-w-4xl mx-auto">
+          <div className="mt-8 max-w-4xl mx-auto">
             <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-xl p-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
@@ -99,7 +147,7 @@ export default function Home() {
                     <MapPinIcon className="absolute left-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2" />
                     <input
                       type="text"
-                      placeholder="Enter city or airport"
+                      placeholder="Enter city or location"
                       value={searchLocation}
                       onChange={(e) => setSearchLocation(e.target.value)}
                       className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-scoovio-500"
@@ -152,21 +200,28 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Featured Scooters */}
+      {/* Featured Equipment */}
       <div className="bg-gray-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Featured scooters</h2>
-            <p className="mt-2 text-lg text-gray-600">Browse our most popular mobility scooters</p>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Featured {selectedCategory === 'ALL' ? 'Equipment' : 
+                selectedCategory === EquipmentType.MOBILITY_SCOOTER ? 'Mobility Scooters' : 'Baby Strollers'}
+            </h2>
+            <p className="mt-2 text-lg text-gray-600">
+              {selectedCategory === 'ALL' ? 'Browse our most popular mobility equipment' :
+               selectedCategory === EquipmentType.MOBILITY_SCOOTER ? 'Browse our most popular mobility scooters' :
+               'Browse our most popular baby strollers'}
+            </p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredScooters.map((scooter) => (
-              <div key={scooter.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            {filteredEquipment.map((equipment) => (
+              <div key={equipment.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <Image
-                    src={scooter.image}
-                    alt={`${scooter.make} ${scooter.model}`}
+                    src={equipment.image}
+                    alt={`${equipment.brand} ${equipment.model}`}
                     width={300}
                     height={200}
                     className="w-full h-48 object-cover"
@@ -174,15 +229,37 @@ export default function Home() {
                   <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
                     <HeartIcon className="h-5 w-5 text-gray-600" />
                   </button>
+                  <div className="absolute top-2 left-2">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white/90 text-gray-800">
+                      {equipment.type === EquipmentType.MOBILITY_SCOOTER ? '🛴' : '👶'}
+                      {equipment.type === EquipmentType.MOBILITY_SCOOTER ? 'Scooter' : 'Stroller'}
+                    </span>
+                  </div>
                 </div>
                 
                 <div className="p-4">
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {scooter.year} {scooter.make} {scooter.model}
+                        {equipment.year} {equipment.brand} {equipment.model}
                       </h3>
-                      <p className="text-sm text-gray-600">{scooter.location}</p>
+                      <p className="text-sm text-gray-600">{equipment.location}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Features */}
+                  <div className="mt-2">
+                    <div className="flex flex-wrap gap-1">
+                      {equipment.features.slice(0, 2).map((feature, index) => (
+                        <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          {feature}
+                        </span>
+                      ))}
+                      {equipment.features.length > 2 && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          +{equipment.features.length - 2} more
+                        </span>
+                      )}
                     </div>
                   </div>
                   
@@ -190,11 +267,11 @@ export default function Home() {
                     <div className="flex items-center">
                       <StarIcon className="h-4 w-4 text-yellow-400 fill-current" />
                       <span className="ml-1 text-sm text-gray-600">
-                        {scooter.rating} ({scooter.trips} trips)
+                        {equipment.rating} ({equipment.trips} trips)
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-2xl font-bold text-gray-900">${scooter.price}</span>
+                      <span className="text-2xl font-bold text-gray-900">${equipment.price}</span>
                       <span className="text-sm text-gray-600">/day</span>
                     </div>
                   </div>
@@ -205,10 +282,11 @@ export default function Home() {
 
           <div className="mt-8 text-center">
             <Link
-              href="/search"
+              href={`/search${selectedCategory !== 'ALL' ? `?type=${selectedCategory}` : ''}`}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-scoovio-700 bg-scoovio-100 hover:bg-scoovio-200"
             >
-              View all scooters
+              View all {selectedCategory === 'ALL' ? 'equipment' : 
+                selectedCategory === EquipmentType.MOBILITY_SCOOTER ? 'mobility scooters' : 'baby strollers'}
             </Link>
           </div>
         </div>
@@ -228,7 +306,7 @@ export default function Home() {
               </div>
               <h3 className="mt-4 text-lg font-medium text-gray-900">Protection included</h3>
               <p className="mt-2 text-base text-gray-600">
-                Every trip includes liability insurance and 24/7 roadside assistance
+                Every rental includes liability insurance and 24/7 support
               </p>
             </div>
 
@@ -236,9 +314,9 @@ export default function Home() {
               <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-md bg-scoovio-600 text-white">
                 <ClockIcon className="h-6 w-6" />
               </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">Skip the counter</h3>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Skip the store</h3>
               <p className="mt-2 text-base text-gray-600">
-                Book scooters directly from local hosts and skip the rental counter lines
+                Book equipment directly from local hosts and skip the rental store hassle
               </p>
             </div>
 
@@ -246,9 +324,9 @@ export default function Home() {
               <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-md bg-scoovio-600 text-white">
                 <StarIcon className="h-6 w-6" />
               </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">Better scooters</h3>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Quality equipment</h3>
               <p className="mt-2 text-base text-gray-600">
-                Choose from thousands of unique mobility scooters in your neighborhood
+                Choose from thousands of mobility scooters and baby strollers in your area
               </p>
             </div>
 
