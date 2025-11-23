@@ -1,91 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, UserGroupIcon, StarIcon, ShieldCheckIcon, ClockIcon, HeartIcon } from '@heroicons/react/24/outline'
-import HowItWorks from '../components/how-it-works'
-import Testimonials from '../components/testimonials'
+import { useRouter } from 'next/navigation'
+import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, UserGroupIcon, StarIcon, ShieldCheckIcon, ClockIcon, HeartIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
+import type { Scooter } from '@/data/scooters'
 
 export default function Home() {
   const [searchLocation, setSearchLocation] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<EquipmentType | 'ALL'>('ALL')
+  const [featuredScooters, setFeaturedScooters] = useState<Scooter[]>([])
+  const router = useRouter()
 
-  const categories = [
-    { key: 'ALL', label: 'All Equipment', icon: '🔍' },
-    { key: EquipmentType.MOBILITY_SCOOTER, label: 'Mobility Scooters', icon: '🛴' },
-    { key: EquipmentType.BABY_STROLLER, label: 'Baby Strollers', icon: '👶' },
-  ]
-
-  const featuredEquipment = [
-    // Mobility Scooters
-    {
-      id: 1,
-      type: EquipmentType.MOBILITY_SCOOTER,
-      brand: 'Pride Mobility',
-      model: 'Go-Go Elite',
-      year: 2023,
-      price: 45,
-      rating: 4.9,
-      trips: 124,
-      image: '/api/placeholder/300/200',
-      location: 'Los Angeles, CA',
-      features: ['Foldable', 'LED Lights', '18 mile range']
-    },
-    {
-      id: 2,
-      type: EquipmentType.MOBILITY_SCOOTER,
-      brand: 'Drive Medical',
-      model: 'Scout Compact',
-      year: 2023,
-      price: 38,
-      rating: 4.8,
-      trips: 89,
-      image: '/api/placeholder/300/200',
-      location: 'San Francisco, CA',
-      features: ['Lightweight', 'Storage Basket', '12 mile range']
-    },
-    // Baby Strollers
-    {
-      id: 3,
-      type: EquipmentType.BABY_STROLLER,
-      brand: 'UPPAbaby',
-      model: 'Vista V2',
-      year: 2023,
-      price: 25,
-      rating: 4.9,
-      trips: 156,
-      image: '/api/placeholder/300/200',
-      location: 'Miami, FL',
-      features: ['Reversible Seat', 'Car Seat Compatible', 'Large Storage']
-    },
-    {
-      id: 4,
-      type: EquipmentType.BABY_STROLLER,
-      brand: 'Bugaboo',
-      model: 'Fox 3',
-      year: 2023,
-      price: 32,
-      rating: 5.0,
-      trips: 45,
-      image: '/api/placeholder/300/200',
-      location: 'New York, NY',
-      features: ['All-Terrain', 'One-Hand Fold', 'Adjustable Handlebar']
-    }
-  ]
+  useEffect(() => {
+    fetch('/api/scooters')
+      .then(res => res.json())
+      .then(data => setFeaturedScooters(data.scooters.slice(0, 4)))
+      .catch(() => setFeaturedScooters([]))
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Navigate to search results with equipment type filter
-    const params = new URLSearchParams()
-    if (searchLocation) params.set('location', searchLocation)
-    if (startDate) params.set('start', startDate)
-    if (endDate) params.set('end', endDate)
-    if (selectedCategory !== 'ALL') params.set('type', selectedCategory)
-    
-    window.location.href = `/search?${params.toString()}`
+    router.push(`/search?location=${searchLocation}&start=${startDate}&end=${endDate}`)
   }
 
   const filteredEquipment = selectedCategory === 'ALL' 
@@ -200,7 +138,42 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Featured Equipment */}
+      {/* How It Works */}
+      <div className="py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-gray-900">How Scoovio works</h2>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-full bg-scoovio-600 text-white">
+                <MagnifyingGlassIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Search</h3>
+              <p className="mt-2 text-base text-gray-600">Find scooters near your destination.</p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-full bg-scoovio-600 text-white">
+                <CalendarDaysIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Book</h3>
+              <p className="mt-2 text-base text-gray-600">Choose dates and reserve in seconds.</p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex items-center justify-center mx-auto h-12 w-12 rounded-full bg-scoovio-600 text-white">
+                <CheckCircleIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-medium text-gray-900">Ride</h3>
+              <p className="mt-2 text-base text-gray-600">Meet your host and enjoy the ride.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Featured Scooters */}
       <div className="bg-gray-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -220,8 +193,8 @@ export default function Home() {
               <div key={equipment.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative">
                   <Image
-                    src={equipment.image}
-                    alt={`${equipment.brand} ${equipment.model}`}
+                    src={scooter.images[0]}
+                    alt={`${scooter.make} ${scooter.model}`}
                     width={300}
                     height={200}
                     className="w-full h-48 object-cover"

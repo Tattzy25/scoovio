@@ -5,26 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, StarIcon, HeartIcon, FunnelIcon } from '@heroicons/react/24/outline'
-
-interface Scooter {
-  id: number
-  make: string
-  model: string
-  year: number
-  price: number
-  rating: number
-  trips: number
-  image: string
-  location: string
-  transmission: string
-  seats: number
-  fuel: string
-  host: {
-    name: string
-    rating: number
-    trips: number
-  }
-}
+import type { Scooter } from '@/data/scooters'
 
 export default function SearchPage() {
   const searchParams = useSearchParams()
@@ -39,112 +20,25 @@ export default function SearchPage() {
   })
 
   useEffect(() => {
-    // Simulate API call with mock data
-    const mockScooters: Scooter[] = [
-      {
-        id: 1,
-        make: 'Vespa',
-              model: 'Primavera',
-        year: 2023,
-        price: 89,
-        rating: 4.9,
-        trips: 124,
-        image: '/api/placeholder/400/300',
-        location: 'Los Angeles, CA',
-        transmission: 'Automatic',
-        seats: 5,
-        fuel: 'Electric',
-        host: { name: 'Alex M.', rating: 4.9, trips: 200 }
-      },
-      {
-        id: 2,
-        make: 'Honda',
-              model: 'PCX',
-        year: 2023,
-        price: 129,
-        rating: 4.8,
-        trips: 89,
-        image: '/api/placeholder/400/300',
-        location: 'San Francisco, CA',
-        transmission: 'Automatic',
-        seats: 7,
-        fuel: 'Gas',
-        host: { name: 'Sarah K.', rating: 4.8, trips: 150 }
-      },
-      {
-        id: 3,
-        make: 'Yamaha',
-              model: 'AeroX',
-        year: 2022,
-        price: 45,
-        rating: 4.7,
-        trips: 256,
-        image: '/api/placeholder/400/300',
-        location: 'Miami, FL',
-        transmission: 'Automatic',
-        seats: 5,
-        fuel: 'Gas',
-        host: { name: 'Mike R.', rating: 4.7, trips: 300 }
-      },
-      {
-        id: 4,
-        make: 'Piaggio',
-              model: 'Liberty',
-        year: 2023,
-        price: 299,
-        rating: 5.0,
-        trips: 45,
-        image: '/api/placeholder/400/300',
-        location: 'New York, NY',
-        transmission: 'Automatic',
-        seats: 4,
-        fuel: 'Gas',
-        host: { name: 'Emma L.', rating: 5.0, trips: 100 }
-      },
-      {
-        id: 5,
-        make: 'Kymco',
-              model: 'Like',
-        year: 2023,
-        price: 55,
-        rating: 4.6,
-        trips: 178,
-        image: '/api/placeholder/400/300',
-        location: 'Chicago, IL',
-        transmission: 'Automatic',
-        seats: 5,
-        fuel: 'Hybrid',
-        host: { name: 'David P.', rating: 4.6, trips: 250 }
-      },
-      {
-        id: 6,
-        make: 'SYM',
-              model: 'Fiddle',
-        year: 2023,
-        price: 85,
-        rating: 4.8,
-        trips: 92,
-        image: '/api/placeholder/400/300',
-        location: 'Denver, CO',
-        transmission: 'Manual',
-        seats: 5,
-        fuel: 'Gas',
-        host: { name: 'Lisa T.', rating: 4.8, trips: 120 }
-      }
-    ]
-    
-    setTimeout(() => {
-      setScooters(mockScooters)
-      setLoading(false)
-    }, 1000)
-  }, [])
+    const location = searchParams.get('location') || ''
+    const params = new URLSearchParams()
+    if (location) params.set('location', location)
 
-  const filteredScooters = scooters.filter(scooter => 
-    scooter.price >= filters.priceMin && 
+    setLoading(true)
+    fetch(`/api/scooters?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        setScooters(data.scooters)
+        setLoading(false)
+      })
+  }, [searchParams])
+
+  const filteredScooters = scooters.filter(scooter =>
+    scooter.price >= filters.priceMin &&
     scooter.price <= filters.priceMax &&
-    (filters.transmission === 'all' || scooter.transmission === filters.transmission) &&
-    (filters.seats === 0 || scooter.seats >= filters.seats) &&
-    (filters.fuel === 'all' || scooter.fuel === filters.fuel)
+    (filters.transmission === 'all' || scooter.features.transmission === filters.transmission) &&
+    (filters.seats === 0 || scooter.features.seats >= filters.seats) &&
+    (filters.fuel === 'all' || scooter.features.fuel === filters.fuel)
   )
 
   return (
@@ -285,7 +179,7 @@ export default function SearchPage() {
                       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                         <div className="relative">
                           <Image
-                            src={scooter.image}
+                            src={scooter.images[0]}
                             alt={`${scooter.make} ${scooter.model}`}
                             width={400}
                             height={300}
@@ -309,7 +203,7 @@ export default function SearchPage() {
                               </h3>
                               <p className="text-sm text-gray-600">{scooter.location}</p>
                               <p className="text-sm text-gray-500">
-                                {scooter.transmission} • {scooter.seats} seats • {scooter.fuel}
+                                {scooter.features.transmission} • {scooter.features.seats} seats • {scooter.features.fuel}
                               </p>
                             </div>
                           </div>
