@@ -4,7 +4,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MagnifyingGlassIcon, MapPinIcon, CalendarDaysIcon, UserGroupIcon, StarIcon, ShieldCheckIcon, ClockIcon, HeartIcon } from '@heroicons/react/24/outline'
-import { EquipmentType } from '@prisma/client'
+import HowItWorks from '../components/how-it-works'
+import Testimonials from '../components/testimonials'
 
 export default function Home() {
   const [searchLocation, setSearchLocation] = useState('')
@@ -341,6 +342,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <HowItWorks />
+      <Testimonials />
 
       {/* Host CTA */}
       <div className="bg-gray-900">
